@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: consumer-scaledobject
+  namespace: default  # Adjust if your consumer is in a different namespace
+spec:
+  scaleTargetRef:
+    name: consumer  # Name of your consumer deployment
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: rabbitmq
+      metadata:
+        queueName: task_queue
+        host: RabbitMQ host  # You may need to provide RabbitMQ connection string
+        username: user       # RabbitMQ username
+        password: password    # RabbitMQ password
+        queueLength: '100'   # Scale out threshold
+        queueLength: '20'    # Scale in threshold
